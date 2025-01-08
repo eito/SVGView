@@ -35,10 +35,12 @@ public class SVGNode: SerializableElement {
     }
 
     public func onTapGesture(_ count: Int = 1, tapClosure: @escaping ()->()) {
-        let newGesture = TapGesture(count: count).onEnded {
-            tapClosure()
+        if #available(tvOS 16.0, *) {
+            let newGesture = TapGesture(count: count).onEnded {
+                tapClosure()
+            }
+            gestures.append(AnyGesture(newGesture.map { _ in () }))
         }
-        gestures.append(AnyGesture(newGesture.map { _ in () }))
     }
 
     public func addGesture<T: Gesture>(_ newGesture: T) {
